@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Deliberately always-dark (not DayNight) - a fitness-tracker look independent
+         of the system light/dark setting. See conversation notes if you'd rather have
+         it follow the system theme instead. -->
+    <style name="Theme.Trackr" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/trackr_accent</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/trackr_accent</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSurface">@color/trackr_surface</item>
+        <item name="colorOnSurface">@color/trackr_on_surface</item>
+        <item name="colorSurfaceVariant">@color/trackr_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/trackr_on_surface_muted</item>
+        <item name="android:colorBackground">@color/trackr_background</item>
+        <item name="colorError">@color/trackr_danger</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/trackr_background</item>
+        <item name="android:navigationBarColor" tools:targetApi="l">@color/trackr_background</item>
+    </style>
+</resources>

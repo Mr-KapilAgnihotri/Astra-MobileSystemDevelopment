@@ -1,0 +1,18 @@
+<resources>
+    <!-- Surfaces: dark-first, one step of elevation between each -->
+    <color name="trackr_background">#121417</color>
+    <color name="trackr_surface">#1B1F23</color>
+    <color name="trackr_surface_variant">#242A2F</color>
+
+    <!-- Text -->
+    <color name="trackr_on_surface">#ECEFF1</color>
+    <color name="trackr_on_surface_muted">#9AA5AD</color>
+
+    <!-- The one accent, used everywhere something needs to draw attention:
+         buttons, active states, stat highlights, the route line. -->
+    <color name="trackr_accent">#3DDC97</color>
+    <color name="trackr_danger">#E5484D</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
