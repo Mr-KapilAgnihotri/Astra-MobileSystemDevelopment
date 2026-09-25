@@ -147,7 +147,7 @@ class TrackingViewModel(
     }
 
     /** Stops sensors, persists the session to Room, and hands the new session's id back. */
-    fun stopTracking(onSaved: (sessionId: Long) -> Unit) {
+    fun stopTracking(effortRating: Int, onSaved: (sessionId: Long) -> Unit) {
         if (!_isTracking.value) return
         _isTracking.value = false
         stopSensors()
@@ -162,7 +162,8 @@ class TrackingViewModel(
             pathJson = _pathPoints.value.toPathJson(),
             weatherTempC = weatherReading?.tempC,
             weatherWeatherCode = weatherReading?.weatherCode,
-            accelSamplesJson = accelSamples.toAccelJson()
+            accelSamplesJson = accelSamples.toAccelJson(),
+            effortRating = effortRating
         )
 
         viewModelScope.launch {

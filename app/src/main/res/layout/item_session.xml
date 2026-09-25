@@ -93,6 +93,19 @@
 
         </LinearLayout>
 
+        <RatingBar
+            android:id="@+id/ratingEffort"
+            style="@style/Widget.Trackr.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xs"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="1"
+            android:visibility="gone"
+            tools:rating="4"
+            tools:visibility="visible" />
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

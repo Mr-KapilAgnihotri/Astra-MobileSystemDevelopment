@@ -14,7 +14,7 @@
 
     <RatingBar
         android:id="@+id/ratingEffort"
-        style="?android:attr/ratingBarStyle"
+        style="@style/Widget.Trackr.RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_xs"

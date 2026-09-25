@@ -41,6 +41,20 @@
         <item name="titleTextColor">?attr/colorOnSurface</item>
     </style>
 
+    <!-- Filled stars use the app accent instead of the platform default yellow, so the
+         rating matches the rest of the design system wherever it's shown. -->
+    <style name="Widget.Trackr.RatingBar" parent="android:Widget.DeviceDefault.RatingBar">
+        <item name="android:progressTint">@color/trackr_accent</item>
+        <item name="android:progressBackgroundTint">?attr/colorSurfaceVariant</item>
+        <item name="android:secondaryProgressTint">@color/trackr_accent</item>
+    </style>
+
+    <style name="Widget.Trackr.RatingBar.Small" parent="android:Widget.DeviceDefault.RatingBar.Small">
+        <item name="android:progressTint">@color/trackr_accent</item>
+        <item name="android:progressBackgroundTint">?attr/colorSurfaceVariant</item>
+        <item name="android:secondaryProgressTint">@color/trackr_accent</item>
+    </style>
+
     <!-- Rounds only the top corners - for a hero image sitting flush under a toolbar/title. -->
     <style name="ShapeAppearance.Trackr.HeroImage" parent="">
         <item name="cornerFamily">rounded</item>

@@ -47,6 +47,8 @@
     <string name="end_session_title">End session?</string>
     <string name="rate_effort_prompt">How was this session?</string>
     <string name="content_description_waiting_for_fix">Waiting for GPS fix</string>
+    <string name="effort_label">EFFORT</string>
+    <string name="content_description_effort_rating_format">Effort rating: %1$d out of 5 stars</string>
 
     <string name="compass_title">COMPASS</string>
     <string name="heading_format">%1$03d° %2$s</string>

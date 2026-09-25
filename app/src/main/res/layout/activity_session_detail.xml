@@ -43,6 +43,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textType" />
 
+    <LinearLayout
+        android:id="@+id/effortRatingRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textDate"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_xs"
+            android:text="@string/effort_label"
+            android:textAppearance="@style/TextAppearance.Trackr.StatLabel" />
+
+        <RatingBar
+            android:id="@+id/ratingEffortDisplay"
+            style="@style/Widget.Trackr.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="1"
+            tools:rating="4" />
+
+    </LinearLayout>
+
     <include
         android:id="@+id/weatherCard"
         layout="@layout/weather_card"
@@ -52,7 +83,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textDate" />
+        app:layout_constraintTop_toBottomOf="@id/effortRatingRow" />
 
     <LinearLayout
         android:id="@+id/statsGrid"

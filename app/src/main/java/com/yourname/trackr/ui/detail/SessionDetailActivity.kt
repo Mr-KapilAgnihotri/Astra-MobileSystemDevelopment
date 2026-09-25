@@ -94,6 +94,15 @@ class SessionDetailActivity : AppCompatActivity() {
         )
         binding.statCalories.textStatValue.text = getString(R.string.calories_format, calories)
 
+        if (session.effortRating > 0) {
+            binding.ratingEffortDisplay.rating = session.effortRating.toFloat()
+            binding.ratingEffortDisplay.contentDescription =
+                getString(R.string.content_description_effort_rating_format, session.effortRating)
+            binding.effortRatingRow.visibility = View.VISIBLE
+        } else {
+            binding.effortRatingRow.visibility = View.GONE
+        }
+
         val points = session.pathJson.toTrackPoints().map { GeoPoint(it.lat, it.lng) }
         binding.mapView.showStaticRoute(points, routeColor, startColor)
 

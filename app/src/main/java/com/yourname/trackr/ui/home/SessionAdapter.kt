@@ -1,6 +1,7 @@
 package com.yourname.trackr.ui.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -49,6 +50,16 @@ class SessionAdapter(
                 session.type, weightKgProvider(), session.endTime - session.startTime
             )
             binding.textCalories.text = String.format("%.0f kcal", calories)
+
+            if (session.effortRating > 0) {
+                binding.ratingEffort.rating = session.effortRating.toFloat()
+                binding.ratingEffort.contentDescription = binding.root.context.getString(
+                    R.string.content_description_effort_rating_format, session.effortRating
+                )
+                binding.ratingEffort.visibility = View.VISIBLE
+            } else {
+                binding.ratingEffort.visibility = View.GONE
+            }
 
             binding.root.setOnClickListener { onItemClick(session) }
         }

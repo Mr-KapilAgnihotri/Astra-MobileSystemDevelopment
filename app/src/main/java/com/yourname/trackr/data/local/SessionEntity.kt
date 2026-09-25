@@ -19,5 +19,6 @@ data class SessionEntity(
     val weatherTempC: Float? = null,
     val weatherWeatherCode: Int? = null,
     val photoUri: String? = null,
-    val accelSamplesJson: String? = null
+    val accelSamplesJson: String? = null,
+    val effortRating: Int = 0
 ) : Parcelable

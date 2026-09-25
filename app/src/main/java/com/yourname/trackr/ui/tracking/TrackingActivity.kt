@@ -146,20 +146,22 @@ class TrackingActivity : AppCompatActivity() {
 
     /** Stop is a destructive-ish action mid-session, so confirm with a quick effort rating
      *  before actually saving - matches the same pattern as other confirmation dialogs in
-     *  the app (MaterialAlertDialogBuilder + an inflated ViewBinding layout). The rating
-     *  itself isn't persisted anywhere yet; this dialog's job is just the confirmation gate. */
+     *  the app (MaterialAlertDialogBuilder + an inflated ViewBinding layout). The chosen
+     *  star count is saved onto the session and shown back on the detail screen. */
     private fun showStopConfirmation() {
         val dialogBinding = DialogStopRatingBinding.inflate(layoutInflater)
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.end_session_title)
             .setView(dialogBinding.root)
-            .setPositiveButton(R.string.save) { _, _ -> stopAndReturn() }
+            .setPositiveButton(R.string.save) { _, _ ->
+                stopAndReturn(dialogBinding.ratingEffort.rating.toInt())
+            }
             .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
-    private fun stopAndReturn() {
-        viewModel.stopTracking { sessionId ->
+    private fun stopAndReturn(effortRating: Int) {
+        viewModel.stopTracking(effortRating) { sessionId ->
             val intent = Intent(this, PhotoCaptureActivity::class.java).apply {
                 putExtra(PhotoCaptureActivity.EXTRA_SESSION_ID, sessionId)
             }
