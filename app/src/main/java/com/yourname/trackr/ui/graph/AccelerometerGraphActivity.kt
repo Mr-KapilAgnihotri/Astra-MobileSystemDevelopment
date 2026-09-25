@@ -29,12 +29,15 @@ class AccelerometerGraphActivity : AppCompatActivity() {
         binding = ActivityAccelGraphBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.statPeak.textStatLabel.text = getString(R.string.stat_label_peak)
+        binding.statAverage.textStatLabel.text = getString(R.string.stat_label_average)
+
         lifecycleScope.launch {
             viewModel.samples.collect { samples ->
                 binding.accelChart.setSamples(samples)
                 binding.textEmpty.visibility = if (samples.isEmpty()) View.VISIBLE else View.GONE
-                binding.textPeak.text = getString(R.string.accel_peak_format, viewModel.peakValue)
-                binding.textAverage.text = getString(R.string.accel_average_format, viewModel.averageValue)
+                binding.statPeak.textStatValue.text = getString(R.string.accel_value_format, viewModel.peakValue)
+                binding.statAverage.textStatValue.text = getString(R.string.accel_value_format, viewModel.averageValue)
             }
         }
     }

@@ -1,17 +1,24 @@
 <resources>
-    <!-- Surfaces: dark-first, one step of elevation between each -->
-    <color name="trackr_background">#121417</color>
-    <color name="trackr_surface">#1B1F23</color>
-    <color name="trackr_surface_variant">#242A2F</color>
+    <!-- Surfaces: dark neutral background, progressively lighter surfaces for elevation -->
+    <color name="trackr_background">#12151A</color>
+    <color name="trackr_surface">#1D2229</color>
+    <color name="trackr_surface_variant">#272E37</color>
 
     <!-- Text -->
-    <color name="trackr_on_surface">#ECEFF1</color>
-    <color name="trackr_on_surface_muted">#9AA5AD</color>
+    <color name="trackr_on_surface">#F3F5F6</color>
+    <color name="trackr_on_surface_muted">#9AA7B2</color>
 
-    <!-- The one accent, used everywhere something needs to draw attention:
-         buttons, active states, stat highlights, the route line. -->
-    <color name="trackr_accent">#3DDC97</color>
+    <!-- The one primary accent: energetic deep teal, used for buttons, active states,
+         stat highlights, and the route line. -->
+    <color name="trackr_accent">#14B8A6</color>
+    <color name="trackr_accent_light">#5EEAD4</color>
+
+    <!-- Semantic colors -->
+    <color name="trackr_success">#22C55E</color>
     <color name="trackr_danger">#E5484D</color>
+
+    <!-- Chart-only helper colors -->
+    <color name="trackr_gridline">#2E3640</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

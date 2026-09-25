@@ -71,6 +71,7 @@ class TrackingViewModel(
 
     private val accelSamples = mutableListOf<Float>()
     private var lastMilestoneCount: Int = 0
+    private var previousLiveFix: TrackPoint? = null
 
     fun onLocationPermissionResult(granted: Boolean) {
         hasLocationPermission = granted
@@ -92,13 +93,14 @@ class TrackingViewModel(
         weatherFetchStarted = false
         accelSamples.clear()
         lastMilestoneCount = 0
+        previousLiveFix = null
 
         stepSensor.start(
             onStepDetected = { _stepCount.value += 1 },
             onSample = { magnitude -> accelSamples.add(magnitude) }
         )
         if (hasLocationPermission) {
-            locationTracker.start { lat, lng -> onNewLocation(lat, lng) }
+            locationTracker.start { lat, lng, isLiveFix -> onNewLocation(lat, lng, isLiveFix) }
         }
 
         timerJob = viewModelScope.launch {
@@ -111,12 +113,20 @@ class TrackingViewModel(
         }
     }
 
-    private fun onNewLocation(lat: Double, lng: Double) {
-        val previous = _pathPoints.value.lastOrNull()
-        if (previous != null) {
-            Location.distanceBetween(previous.lat, previous.lng, lat, lng, distanceResult)
-            _distanceMeters.value += distanceResult[0]
-            checkMilestone()
+    private fun onNewLocation(lat: Double, lng: Double, isLiveFix: Boolean) {
+        // Distance only accumulates between two genuine live fixes. The initial cached
+        // "last known location" (isLiveFix = false) can resolve late and be from anywhere -
+        // e.g. a stale fix from a previous session - so it's shown on the map but never
+        // used as a distance baseline, or it can silently inflate the trip by however far
+        // away that stale point happens to be.
+        if (isLiveFix) {
+            val previous = previousLiveFix
+            if (previous != null) {
+                Location.distanceBetween(previous.lat, previous.lng, lat, lng, distanceResult)
+                _distanceMeters.value += distanceResult[0]
+                checkMilestone()
+            }
+            previousLiveFix = TrackPoint(lat, lng, System.currentTimeMillis())
         }
         _pathPoints.value = _pathPoints.value + TrackPoint(lat, lng, System.currentTimeMillis())
 
@@ -132,7 +142,7 @@ class TrackingViewModel(
         val currentMilestone = (_distanceMeters.value / MILESTONE_METERS).toInt()
         if (currentMilestone > lastMilestoneCount) {
             lastMilestoneCount = currentMilestone
-            milestoneChime.play()
+            viewModelScope.launch { milestoneChime.playMilestoneAlert() }
         }
     }
 

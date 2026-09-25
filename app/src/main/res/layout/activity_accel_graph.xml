@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_sm"
     tools:context=".ui.graph.AccelerometerGraphActivity">
 
     <TextView
@@ -13,9 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/accel_graph_title"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,54 +21,58 @@
         android:id="@+id/statsRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textTitle">
 
-        <TextView
-            android:id="@+id/textPeak"
+        <include
+            android:id="@+id/statPeak"
+            layout="@layout/stat_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            tools:text="Peak: 12.40" />
+            android:layout_marginEnd="@dimen/spacing_xs"
+            android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/textAverage"
+        <include
+            android:id="@+id/statAverage"
+            layout="@layout/stat_card"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            tools:text="Avg: 9.85" />
+            android:layout_marginStart="@dimen/spacing_xs"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
-    <com.yourname.trackr.ui.graph.AccelChartView
-        android:id="@+id/accelChart"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Trackr.Card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/colorSurfaceVariant"
+        android:layout_marginTop="@dimen/spacing_sm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statsRow" />
+        app:layout_constraintTop_toBottomOf="@id/statsRow">
+
+        <com.yourname.trackr.ui.graph.AccelChartView
+            android:id="@+id/accelChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/textEmpty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="@dimen/spacing_sm"
         android:text="@string/no_accel_data"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="14sp"
+        android:textAppearance="@style/TextAppearance.Trackr.BodyMuted"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/accelChart"
-        app:layout_constraintEnd_toEndOf="@id/accelChart"
-        app:layout_constraintStart_toStartOf="@id/accelChart"
-        app:layout_constraintTop_toTopOf="@id/accelChart" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statsRow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,129 +5,151 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_sm"
     tools:context=".ui.detail.SessionDetailActivity">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imagePhoto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurfaceVariant"
+        android:contentDescription="@string/content_description_session_photo"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="H,16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Trackr.HeroImage"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle"
         tools:text="Run"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imagePhoto" />
 
     <TextView
         android:id="@+id/textDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="14sp"
-        tools:text="Sep 12, 2026 7:30 AM"
+        android:textAppearance="@style/TextAppearance.Trackr.BodyMuted"
+        tools:text="Sep 21, 2026 7:30 AM"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textType" />
-
-    <ImageView
-        android:id="@+id/imagePhoto"
-        android:layout_width="0dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="12dp"
-        android:background="?attr/colorSurfaceVariant"
-        android:contentDescription="@null"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textDate" />
 
     <include
         android:id="@+id/weatherCard"
         layout="@layout/weather_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imagePhoto" />
+        app:layout_constraintTop_toBottomOf="@id/textDate" />
 
     <LinearLayout
-        android:id="@+id/statsRow"
+        android:id="@+id/statsGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weatherCard">
 
-        <TextView
-            android:id="@+id/textDuration"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            tools:text="32m" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textSteps"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            tools:text="0 steps" />
+            <include
+                android:id="@+id/statDuration"
+                layout="@layout/stat_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_xs"
+                android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/textDistance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="15sp"
-            tools:text="5.20 km" />
+            <include
+                android:id="@+id/statSteps"
+                layout="@layout/stat_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/textCalories"
-            android:layout_width="0dp"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            tools:text="420 kcal" />
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/statDistance"
+                layout="@layout/stat_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_xs"
+                android:layout_weight="1" />
+
+            <include
+                android:id="@+id/statCalories"
+                layout="@layout/stat_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mapCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:background="?attr/colorSurfaceVariant"
+        android:layout_marginTop="@dimen/spacing_sm"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toTopOf="@id/buttonViewAccelData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statsRow" />
+        app:layout_constraintTop_toBottomOf="@id/statsGrid"
+        app:strokeColor="?attr/colorSurfaceVariant"
+        app:strokeWidth="1dp">
 
-    <Button
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/content_description_route_map" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonViewAccelData"
+        style="@style/Widget.Trackr.Button.Secondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_xs"
         android:text="@string/view_accel_data"
         app:layout_constraintBottom_toTopOf="@id/buttonDelete"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonDelete"
+        style="@style/Widget.Trackr.Button.Destructive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/trackr_danger"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:icon="@drawable/ic_delete"
         android:text="@string/delete_session"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

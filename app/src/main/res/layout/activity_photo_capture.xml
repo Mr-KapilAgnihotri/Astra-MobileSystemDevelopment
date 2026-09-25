@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_sm"
     tools:context=".ui.photo.PhotoCaptureActivity">
 
     <TextView
@@ -13,48 +13,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/photo_prompt_title"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imagePreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:background="?attr/colorSurfaceVariant"
-        android:contentDescription="@null"
+        android:contentDescription="@string/content_description_session_photo"
         android:scaleType="centerCrop"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/buttonRow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textTitle" />
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Trackr.HeroImage"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/buttonRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonTakePhoto"
+            style="@style/Widget.Trackr.Button.Secondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/spacing_xs"
             android:layout_weight="1"
             android:text="@string/take_photo" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSecondary"
+            style="@style/Widget.Trackr.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/spacing_xs"
             android:layout_weight="1"
             android:text="@string/skip" />
 

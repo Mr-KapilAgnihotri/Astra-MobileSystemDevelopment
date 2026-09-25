@@ -1,0 +1,14 @@
+<resources>
+    <!-- 8dp grid - use these everywhere instead of ad-hoc margin/padding values -->
+    <dimen name="spacing_xs">8dp</dimen>
+    <dimen name="spacing_sm">16dp</dimen>
+    <dimen name="spacing_md">24dp</dimen>
+    <dimen name="spacing_lg">32dp</dimen>
+
+    <!-- Corner radius -->
+    <dimen name="radius_card">16dp</dimen>
+    <dimen name="radius_small">8dp</dimen>
+
+    <!-- Minimum touch target -->
+    <dimen name="touch_target_min">48dp</dimen>
+</resources>

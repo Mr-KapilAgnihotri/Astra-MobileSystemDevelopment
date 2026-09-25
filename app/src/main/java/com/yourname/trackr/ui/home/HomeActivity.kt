@@ -14,6 +14,7 @@ import com.yourname.trackr.R
 import com.yourname.trackr.TrackrApplication
 import com.yourname.trackr.data.UserPrefs
 import com.yourname.trackr.data.local.SessionEntity
+import com.yourname.trackr.data.sensors.CompassSensor
 import com.yourname.trackr.databinding.ActivityHomeBinding
 import com.yourname.trackr.databinding.DialogWeightPromptBinding
 import com.yourname.trackr.ui.detail.SessionDetailActivity
@@ -31,7 +32,10 @@ class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by lazy {
         val app = application as TrackrApplication
-        ViewModelProvider(this, HomeViewModel.Factory(app.sessionRepository))[HomeViewModel::class.java]
+        ViewModelProvider(
+            this,
+            HomeViewModel.Factory(app.sessionRepository, CompassSensor(applicationContext))
+        )[HomeViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +56,37 @@ class HomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.sessions.collect { sessions ->
                 sessionAdapter.submitList(sessions)
-                binding.textEmpty.visibility = if (sessions.isEmpty()) View.VISIBLE else View.GONE
+                binding.emptyState.visibility = if (sessions.isEmpty()) View.VISIBLE else View.GONE
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.weeklyDistances.collect { days ->
+                binding.weeklyChart.setData(days)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.heading.collect { heading ->
+                binding.compassDial.setHeading(heading)
+                val roundedDegrees = Math.round(heading) % 360
+                binding.textHeading.text = getString(R.string.heading_format, roundedDegrees, cardinalLabel(heading))
             }
         }
 
         if (!userPrefs.hasBeenPromptedForWeight) {
             showWeightDialog(isFirstRun = true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startCompass()
+    }
+
+    override fun onPause() {
+        viewModel.stopCompass()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -120,5 +148,15 @@ class HomeActivity : AppCompatActivity() {
             putExtra(SessionDetailActivity.EXTRA_SESSION_ID, session.id)
         }
         startActivity(intent)
+    }
+
+    private fun cardinalLabel(headingDegrees: Float): String {
+        val normalized = (headingDegrees % 360f + 360f) % 360f
+        val index = ((normalized + 22.5f) / 45f).toInt() % 8
+        return CARDINAL_DIRECTIONS[index]
+    }
+
+    companion object {
+        private val CARDINAL_DIRECTIONS = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
     }
 }

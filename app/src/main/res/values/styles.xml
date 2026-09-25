@@ -1,0 +1,81 @@
+<resources>
+    <!-- ============ Widget styles: the shared corner radius/typography defaults ============ -->
+
+    <style name="Widget.Trackr.Card" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/radius_card</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+    </style>
+
+    <style name="Widget.Trackr.Card.Small">
+        <item name="cardCornerRadius">@dimen/radius_small</item>
+    </style>
+
+    <style name="Widget.Trackr.Button.Primary" parent="Widget.Material3.Button">
+        <item name="cornerRadius">@dimen/radius_small</item>
+        <item name="android:minHeight">@dimen/touch_target_min</item>
+    </style>
+
+    <style name="Widget.Trackr.Button.Secondary" parent="Widget.Material3.Button.TonalButton">
+        <item name="cornerRadius">@dimen/radius_small</item>
+        <item name="android:minHeight">@dimen/touch_target_min</item>
+    </style>
+
+    <style name="Widget.Trackr.Button.Destructive" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">@dimen/radius_small</item>
+        <item name="android:minHeight">@dimen/touch_target_min</item>
+        <item name="strokeColor">@color/trackr_danger</item>
+        <item name="android:textColor">@color/trackr_danger</item>
+        <item name="iconTint">@color/trackr_danger</item>
+        <item name="rippleColor">@color/trackr_danger</item>
+    </style>
+
+    <style name="Widget.Trackr.Fab.Extended" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.Trackr.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Rounds only the top corners - for a hero image sitting flush under a toolbar/title. -->
+    <style name="ShapeAppearance.Trackr.HeroImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/radius_card</item>
+        <item name="cornerSizeTopRight">@dimen/radius_card</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <!-- ============ Type scale: one style per role, applied via android:textAppearance ============ -->
+
+    <style name="TextAppearance.Trackr.ScreenTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Trackr.StatNumber" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Trackr.StatNumber.Small" parent="TextAppearance.Trackr.StatNumber">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.Trackr.StatLabel" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:letterSpacing">0.08</item>
+    </style>
+
+    <style name="TextAppearance.Trackr.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.Trackr.BodyMuted" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+</resources>

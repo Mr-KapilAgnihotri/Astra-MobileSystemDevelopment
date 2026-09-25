@@ -1,13 +1,13 @@
 package com.yourname.trackr.ui
 
+import android.graphics.Paint
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-private const val LIVE_ZOOM = 18.0
+private const val REPLAY_ZOOM = 18.0
 private const val DEFAULT_ZOOM = 4.0
 private val DEFAULT_CENTER = GeoPoint(20.0, 0.0)
 
@@ -19,42 +19,19 @@ fun MapView.setUpBasicMap() {
     controller.setCenter(DEFAULT_CENTER)
 }
 
-/**
- * Redraws the route as new GPS points arrive during live tracking: a polyline for the path
- * so far, a marker on the latest point, and the camera follows that latest point.
- */
-fun MapView.updateLiveRoute(points: List<GeoPoint>, routeColor: Int) {
-    overlays.clear()
-    if (points.isEmpty()) {
-        invalidate()
-        return
-    }
-
-    if (points.size > 1) {
-        overlays.add(
-            Polyline(this).apply {
-                setPoints(points)
-                outlinePaint.color = routeColor
-                outlinePaint.strokeWidth = 8f
-            }
-        )
-    }
-
-    val last = points.last()
-    overlays.add(
-        Marker(this).apply {
-            position = last
-            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+private fun routePolyline(points: List<GeoPoint>, routeColor: Int): Polyline =
+    Polyline().apply {
+        setPoints(points)
+        outlinePaint.apply {
+            color = routeColor
+            strokeWidth = 9f
+            strokeCap = Paint.Cap.ROUND
+            strokeJoin = Paint.Join.ROUND
         }
-    )
+    }
 
-    if (zoomLevelDouble < LIVE_ZOOM) controller.setZoom(LIVE_ZOOM)
-    controller.animateTo(last)
-    invalidate()
-}
-
-/** Draws a finished route once and zooms/pans to fit its full bounding box. */
-fun MapView.showStaticRoute(points: List<GeoPoint>, routeColor: Int) {
+/** Draws a finished route once - start/end markers, rounded polyline - and zooms/pans to fit it. */
+fun MapView.showStaticRoute(points: List<GeoPoint>, routeColor: Int, startColor: Int) {
     overlays.clear()
     if (points.isEmpty()) {
         invalidate()
@@ -62,23 +39,17 @@ fun MapView.showStaticRoute(points: List<GeoPoint>, routeColor: Int) {
     }
 
     if (points.size > 1) {
-        overlays.add(
-            Polyline(this).apply {
-                setPoints(points)
-                outlinePaint.color = routeColor
-                outlinePaint.strokeWidth = 8f
-            }
-        )
+        overlays.add(routePolyline(points, routeColor))
+        overlays.add(MapDotOverlay(startColor).apply { point = points.first() })
     }
-    overlays.add(Marker(this).apply { position = points.first() })
-    overlays.add(Marker(this).apply { position = points.last() })
+    overlays.add(MapDotOverlay(routeColor).apply { point = points.last() })
 
     // zoomToBoundingBox needs the view to already have a real size, so defer to after layout.
     post {
         if (points.size > 1) {
             zoomToBoundingBox(BoundingBox.fromGeoPoints(points), true, 64)
         } else {
-            controller.setZoom(LIVE_ZOOM)
+            controller.setZoom(REPLAY_ZOOM)
             controller.setCenter(points.first())
         }
     }

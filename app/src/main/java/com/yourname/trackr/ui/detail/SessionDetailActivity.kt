@@ -30,6 +30,7 @@ class SessionDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySessionDetailBinding
     private val routeColor: Int by lazy { ContextCompat.getColor(this, R.color.trackr_accent) }
+    private val startColor: Int by lazy { ContextCompat.getColor(this, R.color.trackr_success) }
 
     private val viewModel: DetailViewModel by lazy {
         val app = application as TrackrApplication
@@ -45,6 +46,11 @@ class SessionDetailActivity : AppCompatActivity() {
         binding = ActivitySessionDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.mapView.setUpBasicMap()
+
+        binding.statDuration.textStatLabel.text = getString(R.string.stat_label_time)
+        binding.statSteps.textStatLabel.text = getString(R.string.stat_label_steps)
+        binding.statDistance.textStatLabel.text = getString(R.string.stat_label_distance)
+        binding.statCalories.textStatLabel.text = getString(R.string.stat_label_calories)
 
         binding.buttonDelete.setOnClickListener { viewModel.deleteSession() }
         binding.buttonViewAccelData.setOnClickListener {
@@ -78,18 +84,18 @@ class SessionDetailActivity : AppCompatActivity() {
         binding.textDate.text = DateFormat.getDateTimeInstance(
             DateFormat.MEDIUM, DateFormat.SHORT
         ).format(Date(session.startTime))
-        binding.textDistance.text = getString(R.string.distance_km_format, session.distanceMeters / 1000f)
-        binding.textSteps.text = getString(R.string.steps_format, session.stepCount)
-        binding.textDuration.text = formatDuration(session.endTime - session.startTime)
+        binding.statDuration.textStatValue.text = formatDuration(session.endTime - session.startTime)
+        binding.statSteps.textStatValue.text = session.stepCount.toString()
+        binding.statDistance.textStatValue.text = getString(R.string.distance_km_format, session.distanceMeters / 1000f)
 
         val weightKg = (application as TrackrApplication).userPrefs.weightKg
         val calories = CalorieCalculator.estimateCalories(
             session.type, weightKg, session.endTime - session.startTime
         )
-        binding.textCalories.text = getString(R.string.calories_format, calories)
+        binding.statCalories.textStatValue.text = getString(R.string.calories_format, calories)
 
         val points = session.pathJson.toTrackPoints().map { GeoPoint(it.lat, it.lng) }
-        binding.mapView.showStaticRoute(points, routeColor)
+        binding.mapView.showStaticRoute(points, routeColor, startColor)
 
         if (session.photoUri != null) {
             binding.imagePhoto.setImageURI(Uri.parse(session.photoUri))
@@ -105,12 +111,14 @@ class SessionDetailActivity : AppCompatActivity() {
             binding.weatherCard.textWeatherTemp.text = getString(R.string.temp_c_format, tempC)
             binding.weatherCard.textWeatherCondition.text = presentation.label
             binding.weatherCard.imageWeatherIcon.setImageResource(presentation.iconRes)
+            binding.weatherCard.imageWeatherIcon.contentDescription =
+                getString(R.string.content_description_weather_icon_format, presentation.label)
             binding.weatherCard.root.fadeIn()
         } else {
             binding.weatherCard.root.visibility = View.GONE
         }
 
-        binding.statsRow.fadeIn()
+        binding.statsGrid.fadeIn()
     }
 
     private fun formatDuration(millis: Long): String {

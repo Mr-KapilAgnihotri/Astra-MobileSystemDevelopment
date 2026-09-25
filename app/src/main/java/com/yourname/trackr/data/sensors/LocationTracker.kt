@@ -57,7 +57,7 @@ class LocationTracker(private val context: Context) {
     }
 
     @SuppressLint("MissingPermission")
-    fun start(onLocation: (lat: Double, lng: Double) -> Unit) {
+    fun start(onLocation: (lat: Double, lng: Double, isLiveFix: Boolean) -> Unit) {
         if (!hasLocationPermission()) {
             Log.w(TAG, "start() called without ACCESS_FINE_LOCATION granted - ignoring")
             return
@@ -67,12 +67,15 @@ class LocationTracker(private val context: Context) {
         if (client != null) {
             Log.d(TAG, "Starting updates via FusedLocationProviderClient")
             // Don't make the caller wait for the first periodic update - report a cached fix
-            // right away if the device has one.
+            // right away if the device has one. This cached fix can be stale (a different
+            // place entirely, resolved out of order relative to live updates), so it's
+            // reported with isLiveFix = false: good enough to populate the map immediately,
+            // not trustworthy enough to feed into distance-tracking math.
             client.lastLocation
                 .addOnSuccessListener { location ->
                     location?.let {
                         Log.d(TAG, "Cached last location: ${it.latitude}, ${it.longitude}")
-                        onLocation(it.latitude, it.longitude)
+                        onLocation(it.latitude, it.longitude, false)
                     } ?: Log.d(TAG, "No cached last location available yet")
                 }
                 .addOnFailureListener { e -> Log.w(TAG, "getLastLocation failed", e) }
@@ -82,7 +85,7 @@ class LocationTracker(private val context: Context) {
                 override fun onLocationResult(result: LocationResult) {
                     result.lastLocation?.let {
                         Log.d(TAG, "Fused location update: ${it.latitude}, ${it.longitude}")
-                        onLocation(it.latitude, it.longitude)
+                        onLocation(it.latitude, it.longitude, true)
                     }
                 }
             }
@@ -95,7 +98,7 @@ class LocationTracker(private val context: Context) {
     }
 
     @SuppressLint("MissingPermission")
-    private fun startPlainLocationUpdates(onLocation: (lat: Double, lng: Double) -> Unit) {
+    private fun startPlainLocationUpdates(onLocation: (lat: Double, lng: Double, isLiveFix: Boolean) -> Unit) {
         val manager = plainLocationManager ?: return
         val provider = when {
             manager.isProviderEnabled(LocationManager.GPS_PROVIDER) -> LocationManager.GPS_PROVIDER
@@ -108,13 +111,13 @@ class LocationTracker(private val context: Context) {
 
         manager.getLastKnownLocation(provider)?.let {
             Log.d(TAG, "Cached last known location ($provider): ${it.latitude}, ${it.longitude}")
-            onLocation(it.latitude, it.longitude)
+            onLocation(it.latitude, it.longitude, false)
         }
 
         val listener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
                 Log.d(TAG, "LocationManager update: ${location.latitude}, ${location.longitude}")
-                onLocation(location.latitude, location.longitude)
+                onLocation(location.latitude, location.longitude, true)
             }
 
             @Deprecated("Deprecated in Java", ReplaceWith(""))

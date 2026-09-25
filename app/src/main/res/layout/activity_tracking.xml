@@ -5,16 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_sm"
     tools:context=".ui.tracking.TrackingActivity">
 
     <TextView
         android:id="@+id/textActivityType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle"
         tools:text="Run"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +22,7 @@
         layout="@layout/weather_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/spacing_xs"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +32,7 @@
         android:id="@+id/statsGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weatherCard">
@@ -49,7 +47,7 @@
                 layout="@layout/stat_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="@dimen/spacing_xs"
                 android:layout_weight="1" />
 
             <include
@@ -57,7 +55,7 @@
                 layout="@layout/stat_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="@dimen/spacing_xs"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -65,7 +63,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/spacing_xs"
             android:orientation="horizontal">
 
             <include
@@ -73,7 +71,7 @@
                 layout="@layout/stat_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="@dimen/spacing_xs"
                 android:layout_weight="1" />
 
             <include
@@ -81,7 +79,7 @@
                 layout="@layout/stat_card"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="@dimen/spacing_xs"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -92,64 +90,88 @@
         android:id="@+id/textPermissionWarning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/spacing_xs"
         android:text="@string/location_permission_required"
+        android:textAppearance="@style/TextAppearance.Trackr.Body"
         android:textColor="@color/trackr_danger"
-        android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/statsGrid"
         tools:visibility="visible" />
 
-    <org.osmdroid.views.MapView
-        android:id="@+id/mapView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mapCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:background="?attr/colorSurfaceVariant"
+        android:layout_marginTop="@dimen/spacing_sm"
+        app:cardBackgroundColor="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toTopOf="@id/buttonRow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textPermissionWarning" />
+        app:layout_constraintTop_toBottomOf="@id/textPermissionWarning"
+        app:strokeColor="?attr/colorSurfaceVariant"
+        app:strokeWidth="1dp">
 
-    <TextView
-        android:id="@+id/textRouteEmpty"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?attr/colorSurfaceVariant"
-        android:gravity="center"
-        android:text="@string/waiting_for_gps"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/mapView"
-        app:layout_constraintEnd_toEndOf="@id/mapView"
-        app:layout_constraintStart_toStartOf="@id/mapView"
-        app:layout_constraintTop_toTopOf="@id/mapView"
-        tools:visibility="visible" />
+        <org.osmdroid.views.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/content_description_route_map" />
+
+        <LinearLayout
+            android:id="@+id/waitingForFixGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceVariant"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/progressWaitingForFix"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/content_description_waiting_for_fix"
+                android:indeterminateTint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/textRouteEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/waiting_for_gps"
+                android:textAppearance="@style/TextAppearance.Trackr.BodyMuted" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
         android:id="@+id/buttonRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/spacing_sm"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonStart"
+            style="@style/Widget.Trackr.Button.Secondary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/spacing_xs"
             android:layout_weight="1"
             android:text="@string/start" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonStop"
+            style="@style/Widget.Trackr.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/spacing_xs"
             android:layout_weight="1"
             android:text="@string/stop" />
 

@@ -11,46 +11,152 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/app_name"
-        app:titleTextColor="?attr/colorOnSurface" />
+        app:title="@string/app_name" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/compassCard"
+        style="@style/Widget.Trackr.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_sm"
+        android:layout_marginTop="@dimen/spacing_xs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_xs">
+
+            <com.yourname.trackr.ui.compass.CompassDialView
+                android:id="@+id/compassDial"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:contentDescription="@string/content_description_compass_dial" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_sm"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/compass_title"
+                    android:textAppearance="@style/TextAppearance.Trackr.StatLabel" />
+
+                <TextView
+                    android:id="@+id/textHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textAppearance="@style/TextAppearance.Trackr.StatNumber.Small"
+                    tools:text="047° NE" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/weeklyCard"
+        style="@style/Widget.Trackr.Card"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginHorizontal="@dimen/spacing_sm"
+        android:layout_marginTop="@dimen/spacing_xs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/compassCard">
+
+        <com.yourname.trackr.ui.weekly.WeeklyBarChartView
+            android:id="@+id/weeklyChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_sm" />
+
+        <TextView
+            android:id="@+id/textWeeklyFallback"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/spacing_sm"
+            android:textAppearance="@style/TextAppearance.Trackr.Body"
+            android:visibility="gone"
+            tools:text="This week: 12.4 km across 3 sessions"
+            tools:visibility="visible" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSessions"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingBottom="80dp"
+        android:paddingBottom="96dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/weeklyCard"
         tools:listitem="@layout/item_session" />
 
-    <TextView
-        android:id="@+id/textEmpty"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/emptyState"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/no_sessions_yet"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/spacing_lg"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/weeklyCard"
+        tools:visibility="visible">
 
-    <Button
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:alpha="0.6"
+            android:contentDescription="@string/content_description_empty_state"
+            android:src="@drawable/ic_empty_sessions"
+            app:tint="?attr/colorOnSurfaceVariant" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:text="@string/no_sessions_yet"
+            android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/no_sessions_subtitle"
+            android:textAppearance="@style/TextAppearance.Trackr.BodyMuted" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/buttonStartSession"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/start_session"
+        android:layout_margin="@dimen/spacing_sm"
+        android:contentDescription="@string/start_session"
+        android:text="@string/start"
+        app:icon="@drawable/ic_run"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

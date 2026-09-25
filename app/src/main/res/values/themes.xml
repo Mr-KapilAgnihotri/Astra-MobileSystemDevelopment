@@ -7,6 +7,8 @@
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/trackr_accent</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="colorTertiary">@color/trackr_success</item>
+        <item name="colorOnTertiary">@color/black</item>
         <item name="colorSurface">@color/trackr_surface</item>
         <item name="colorOnSurface">@color/trackr_on_surface</item>
         <item name="colorSurfaceVariant">@color/trackr_surface_variant</item>
@@ -15,5 +17,13 @@
         <item name="colorError">@color/trackr_danger</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/trackr_background</item>
         <item name="android:navigationBarColor" tools:targetApi="l">@color/trackr_background</item>
+
+        <!-- Design-system defaults: every MaterialCardView/MaterialButton picks these up
+             automatically, so corner radius and typography live in one place instead of
+             being repeated per-view. -->
+        <item name="materialCardViewStyle">@style/Widget.Trackr.Card</item>
+        <item name="materialButtonStyle">@style/Widget.Trackr.Button.Primary</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.Trackr.Fab.Extended</item>
+        <item name="toolbarStyle">@style/Widget.Trackr.Toolbar</item>
     </style>
 </resources>

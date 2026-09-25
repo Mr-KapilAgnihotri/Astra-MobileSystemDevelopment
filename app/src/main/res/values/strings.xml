@@ -3,7 +3,8 @@
     <string name="start_session">Start session</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="no_sessions_yet">No sessions yet. Start your first one!</string>
+    <string name="no_sessions_yet">No sessions yet</string>
+    <string name="no_sessions_subtitle">Tap Start to track your first run, walk, or ride.</string>
     <string name="session_saved">Session saved</string>
     <string name="steps_format">%1$d steps</string>
     <string name="distance_km_format">%1$.2f km</string>
@@ -35,10 +36,25 @@
 
     <string name="view_accel_data">View accelerometer data</string>
     <string name="accel_graph_title">Accelerometer Data</string>
-    <string name="accel_peak_format">Peak: %1$.2f</string>
-    <string name="accel_average_format">Avg: %1$.2f</string>
+    <string name="accel_value_format">%1$.2f</string>
+    <string name="stat_label_peak">PEAK</string>
+    <string name="stat_label_average">AVERAGE</string>
     <string name="no_accel_data">No accelerometer data recorded for this session</string>
 
     <string name="weekly_stats_title">This Week</string>
     <string name="view_weekly_stats">Weekly stats</string>
+
+    <string name="end_session_title">End session?</string>
+    <string name="rate_effort_prompt">How was this session?</string>
+    <string name="content_description_waiting_for_fix">Waiting for GPS fix</string>
+
+    <string name="compass_title">COMPASS</string>
+    <string name="heading_format">%1$03d° %2$s</string>
+    <string name="content_description_compass_dial">Compass dial pointing toward magnetic north</string>
+
+    <string name="content_description_empty_state">No sessions yet illustration</string>
+    <string name="content_description_activity_icon_format">%1$s activity</string>
+    <string name="content_description_weather_icon_format">Weather: %1$s</string>
+    <string name="content_description_session_photo">Photo from this session</string>
+    <string name="content_description_route_map">Map of the route</string>
 </resources>

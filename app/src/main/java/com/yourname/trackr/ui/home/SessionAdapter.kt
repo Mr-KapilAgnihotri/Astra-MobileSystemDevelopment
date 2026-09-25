@@ -36,6 +36,9 @@ class SessionAdapter(
         fun bind(session: SessionEntity) {
             binding.textType.text = session.type
             binding.imageActivityIcon.setImageResource(iconFor(session.type))
+            binding.imageActivityIcon.contentDescription = binding.root.context.getString(
+                R.string.content_description_activity_icon_format, session.type
+            )
             binding.textDate.text = DateFormat.getDateTimeInstance(
                 DateFormat.MEDIUM, DateFormat.SHORT
             ).format(Date(session.startTime))

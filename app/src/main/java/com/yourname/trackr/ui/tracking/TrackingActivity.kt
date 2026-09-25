@@ -11,18 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yourname.trackr.R
 import com.yourname.trackr.TrackrApplication
 import com.yourname.trackr.data.sensors.LocationTracker
 import com.yourname.trackr.data.sensors.MilestoneChime
 import com.yourname.trackr.data.sensors.StepSensor
 import com.yourname.trackr.databinding.ActivityTrackingBinding
+import com.yourname.trackr.databinding.DialogStopRatingBinding
+import com.yourname.trackr.ui.LiveRouteRenderer
 import com.yourname.trackr.ui.WeatherPresenter
 import com.yourname.trackr.ui.fadeIn
 import com.yourname.trackr.ui.photo.PhotoCaptureActivity
 import com.yourname.trackr.ui.setUpBasicMap
-import com.yourname.trackr.ui.updateLiveRoute
 import com.yourname.trackr.viewmodel.TrackingViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import java.util.concurrent.TimeUnit
@@ -31,12 +34,21 @@ import java.util.concurrent.TimeUnit
  * Live tracking screen. Start registers the step + location sensors through
  * TrackingViewModel; Stop unregisters them, persists the finished session to
  * Room, and hands the saved SessionEntity back to HomeActivity.
+ *
+ * The live route renders on a real osmdroid MapView (same as SessionDetailActivity's
+ * replay) via LiveRouteRenderer, which glides new GPS fixes smoothly instead of
+ * teleporting rather than a plain Canvas line.
  */
 class TrackingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTrackingBinding
     private var activityType: String = "Run"
+
     private val routeColor: Int by lazy { ContextCompat.getColor(this, R.color.trackr_accent) }
+    private val startColor: Int by lazy { ContextCompat.getColor(this, R.color.trackr_success) }
+    private val liveRoute: LiveRouteRenderer by lazy {
+        LiveRouteRenderer(binding.mapView, routeColor, startColor)
+    }
 
     private val viewModel: TrackingViewModel by lazy {
         val app = application as TrackrApplication
@@ -82,7 +94,7 @@ class TrackingActivity : AppCompatActivity() {
         requestLocationPermissionIfNeeded()
 
         binding.buttonStart.setOnClickListener { viewModel.startTracking() }
-        binding.buttonStop.setOnClickListener { stopAndReturn() }
+        binding.buttonStop.setOnClickListener { showStopConfirmation() }
 
         observeViewModel()
     }
@@ -90,12 +102,14 @@ class TrackingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         binding.mapView.onResume()
+        if (viewModel.isTracking.value) liveRoute.start()
         // The user may have granted the permission or flipped Location Services on/off in
         // Settings and come back here, so re-check rather than trusting stale state.
         refreshTrackingAvailability()
     }
 
     override fun onPause() {
+        liveRoute.stop()
         binding.mapView.onPause()
         super.onPause()
     }
@@ -130,6 +144,20 @@ class TrackingActivity : AppCompatActivity() {
         binding.textPermissionWarning.visibility = if (warning != null && !tracking) View.VISIBLE else View.GONE
     }
 
+    /** Stop is a destructive-ish action mid-session, so confirm with a quick effort rating
+     *  before actually saving - matches the same pattern as other confirmation dialogs in
+     *  the app (MaterialAlertDialogBuilder + an inflated ViewBinding layout). The rating
+     *  itself isn't persisted anywhere yet; this dialog's job is just the confirmation gate. */
+    private fun showStopConfirmation() {
+        val dialogBinding = DialogStopRatingBinding.inflate(layoutInflater)
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.end_session_title)
+            .setView(dialogBinding.root)
+            .setPositiveButton(R.string.save) { _, _ -> stopAndReturn() }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun stopAndReturn() {
         viewModel.stopTracking { sessionId ->
             val intent = Intent(this, PhotoCaptureActivity::class.java).apply {
@@ -142,7 +170,10 @@ class TrackingActivity : AppCompatActivity() {
 
     private fun observeViewModel() {
         lifecycleScope.launch {
-            viewModel.isTracking.collect { refreshTrackingAvailability() }
+            viewModel.isTracking.collect { tracking ->
+                refreshTrackingAvailability()
+                if (tracking) liveRoute.start() else liveRoute.stop()
+            }
         }
         lifecycleScope.launch {
             viewModel.elapsedSeconds.collect { seconds ->
@@ -166,11 +197,20 @@ class TrackingActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             viewModel.pathPoints.collect { points ->
-                val isTracking = viewModel.isTracking.value
-                binding.textRouteEmpty.visibility = if (isTracking && points.isEmpty()) View.VISIBLE else View.GONE
                 if (points.isNotEmpty()) {
-                    binding.mapView.updateLiveRoute(points.map { GeoPoint(it.lat, it.lng) }, routeColor)
+                    liveRoute.setPoints(points.map { GeoPoint(it.lat, it.lng) })
                 }
+            }
+        }
+        // Separate from the pathPoints collector above: pathPoints is a StateFlow that gets
+        // reset to the *same* emptyList() value on startTracking(), so it never re-emits on
+        // Start alone (StateFlow only emits on actual change) - combine with isTracking so
+        // this recalculates whenever either one changes, not just when the point list does.
+        lifecycleScope.launch {
+            combine(viewModel.isTracking, viewModel.pathPoints) { tracking, points ->
+                tracking && points.isEmpty()
+            }.collect { waitingForFix ->
+                binding.waitingForFixGroup.visibility = if (waitingForFix) View.VISIBLE else View.GONE
             }
         }
         lifecycleScope.launch {
@@ -180,6 +220,8 @@ class TrackingActivity : AppCompatActivity() {
                     binding.weatherCard.textWeatherTemp.text = getString(R.string.temp_c_format, weather.tempC)
                     binding.weatherCard.textWeatherCondition.text = presentation.label
                     binding.weatherCard.imageWeatherIcon.setImageResource(presentation.iconRes)
+                    binding.weatherCard.imageWeatherIcon.contentDescription =
+                        getString(R.string.content_description_weather_icon_format, presentation.label)
                     if (binding.weatherCard.root.visibility != View.VISIBLE) {
                         binding.weatherCard.root.fadeIn()
                     }

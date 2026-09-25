@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground"
-    android:padding="16dp"
+    android:padding="@dimen/spacing_sm"
     tools:context=".ui.weekly.WeeklyStatsActivity">
 
     <TextView
@@ -13,20 +13,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/weekly_stats_title"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Trackr.ScreenTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yourname.trackr.ui.weekly.WeeklyBarChartView
-        android:id="@+id/weeklyChart"
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Trackr.Card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/spacing_md"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textTitle" />
+        app:layout_constraintTop_toBottomOf="@id/textTitle">
+
+        <com.yourname.trackr.ui.weekly.WeeklyBarChartView
+            android:id="@+id/weeklyChart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/spacing_sm" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

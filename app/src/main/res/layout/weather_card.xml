@@ -2,52 +2,42 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Trackr.Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/colorSurface"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="0dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingHorizontal="@dimen/spacing_sm"
+        android:paddingVertical="@dimen/spacing_xs">
 
         <ImageView
             android:id="@+id/imageWeatherIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:contentDescription="@null"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             app:tint="?attr/colorPrimary"
             tools:src="@drawable/ic_sunny" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textWeatherTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_xs"
+            android:textAppearance="@style/TextAppearance.Trackr.Body"
+            android:textStyle="bold"
+            tools:text="18°C" />
+
+        <TextView
+            android:id="@+id/textWeatherCondition"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
+            android:layout_marginStart="@dimen/spacing_xs"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textWeatherTemp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                tools:text="18°C" />
-
-            <TextView
-                android:id="@+id/textWeatherCondition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="14sp"
-                tools:text="Clear" />
-
-        </LinearLayout>
+            android:textAppearance="@style/TextAppearance.Trackr.BodyMuted"
+            tools:text="Clear" />
 
     </LinearLayout>
 
